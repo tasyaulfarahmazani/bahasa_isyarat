@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BISINDO — Pengenalan Bahasa Isyarat</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header>
+    <div class="logo">
+      <span class="logo-title">BISINDO</span>
+      <span class="logo-sub">Pengenalan Bahasa Isyarat</span>
+    </div>
+    <div class="status-bar">
+      <span class="dot" id="apiDot"></span>
+      <span id="apiStatus">Menghubungkan...</span>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- Mode selector -->
+    <div class="mode-tabs">
+      <button class="tab active" data-mode="static" onclick="switchMode('static')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <rect x="3" y="3" width="7" height="7" rx="1"/>
+          <rect x="14" y="3" width="7" height="7" rx="1"/>
+          <rect x="3" y="14" width="7" height="7" rx="1"/>
+          <rect x="14" y="14" width="7" height="7" rx="1"/>
+        </svg>
+        Huruf &amp; Angka
+      </button>
+      <button class="tab" data-mode="dynamic" onclick="switchMode('dynamic')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <circle cx="12" cy="12" r="9"/>
+          <polyline points="12 7 12 12 15 15"/>
+        </svg>
+        Kata (LSTM)
+      </button>
+    </div>
+
+    <!-- Camera -->
+    <div class="camera-zone">
+      <div class="video-wrap" id="videoWrap">
+        <div class="idle-overlay" id="idleOverlay">
+          <div class="idle-icon"></div>
+          <p>Klik tombol di bawah<br>untuk membuka kamera</p>
+        </div>
+
+        <video id="video" autoplay playsinline muted></video>
+        <canvas id="canvas" style="display:none"></canvas>
+
+        <div class="scan-line" id="scanLine"></div>
+
+        <span class="corner tl"></span>
+        <span class="corner tr"></span>
+        <span class="corner bl"></span>
+        <span class="corner br"></span>
+      </div>
+
+      <div class="controls">
+        <button class="btn-start" id="btnStart" onclick="toggleCamera()">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+          Mulai Kamera
+        </button>
+        <button class="btn-reset" onclick="resetSentence()" title="Reset kalimat">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M3 12a9 9 0 109-9M3 3v5h5"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div class="result-panel">
+
+      <div class="pred-card">
+        <div class="pred-label">Deteksi sekarang</div>
+        <div class="pred-value" id="predValue">—</div>
+        <div class="confidence-wrap">
+          <div class="confidence-bar">
+            <div class="confidence-fill" id="confFill" style="width:0%"></div>
+          </div>
+          <span class="confidence-pct" id="confPct">0%</span>
+        </div>
+        <div class="buffer-wrap" id="bufferWrap" style="display:none">
+          <div class="buffer-label">Buffer sequence</div>
+          <div class="buffer-bar">
+            <div class="buffer-fill" id="bufferFill" style="width:0%"></div>
+          </div>
+          <span id="bufferPct">0 / 30</span>
+        </div>
+      </div>
+
+      <div class="pred-card">
+        <div class="pred-label">Informasi sesi</div>
+        <div style="margin-top:6px">
+          <div class="pred-label" style="margin-bottom:4px">Mode aktif</div>
+          <span id="modeLabel" style="font-family:var(--mono);font-size:0.82rem;color:var(--ink-2)">Huruf &amp; Angka</span>
+        </div>
+        <div style="margin-top:14px">
+          <div class="pred-label" style="margin-bottom:4px">Threshold</div>
+          <span style="font-family:var(--mono);font-size:0.82rem;color:var(--ink-2)">40% confidence</span>
+        </div>
+      </div>
+
+      <div class="sentence-card">
+        <div class="sentence-header">
+          <span class="pred-label" style="margin-bottom:0">Kalimat terbentuk</span>
+          <button class="btn-copy" onclick="copySentence()" title="Salin kalimat">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="9" y="9" width="13" height="13" rx="2"/>
+              <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+            </svg>
+          </button>
+        </div>
+        <div class="sentence-tokens" id="sentenceTokens">
+          <span class="token-placeholder">Mulai deteksi untuk melihat hasil...</span>
+        </div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat">
+          <span class="stat-num" id="statTotal">0</span>
+          <span class="stat-label">Total Deteksi</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num" id="statAccepted">0</span>
+          <span class="stat-label">Diterima</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num" id="statFps">0</span>
+          <span class="stat-label">FPS</span>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

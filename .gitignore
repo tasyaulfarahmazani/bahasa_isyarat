@@ -1,0 +1,68 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtual Environment
+venv/
+.env/
+.env.*
+
+# Model & Training Files
+models/*.joblib
+models/*.keras
+models/*.h5
+models/*.npy
+*.ckpt
+*.pth
+
+# Dataset
+dataset/images/
+dataset/labels/
+dataset/dynamic/
+*.csv
+
+# Logs
+*.log
+
+# Cache
+.cache/
+.pytest_cache/
+
+# VSCode
+.vscode/
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Build / Temp
+dist/
+build/
+temp/
+tmp/
+
+# Flask
+instance/
+.webassets-cache
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Runtime
+*.pid
+*.sqlite3
+
+# Media / Generated
+confusion_matrix.png
+
+# Node (kalau nanti pakai frontend build)
+node_modules/
+
+# Ignore semua model hasil training
+models/
+
+# Ignore semua dataset mentah
+dataset/
